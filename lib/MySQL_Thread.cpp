@@ -218,6 +218,7 @@ static char * mysql_thread_variables_names[]= {
 	(char *)"connection_max_age_ms",
 	(char *)"connect_timeout_server",
 	(char *)"connect_timeout_server_max",
+	(char *)"eventslog_fileformat",
 	(char *)"eventslog_filename",
 	(char *)"eventslog_filesize",
 	(char *)"default_charset",
@@ -421,6 +422,7 @@ MySQL_Threads_Handler::MySQL_Threads_Handler() {
 	variables.default_charset=33;
 	variables.interfaces=strdup((char *)"");
 	variables.server_version=strdup((char *)"5.5.30");
+	variables.eventslog_fileformat=FORMAT_UNSPECIFIED;
 	variables.eventslog_filename=strdup((char *)""); // proxysql-mysql-eventslog is recommended
 	variables.eventslog_filesize=100*1024*1024;
 	//variables.server_capabilities=CLIENT_FOUND_ROWS | CLIENT_PROTOCOL_41 | CLIENT_IGNORE_SIGPIPE | CLIENT_TRANSACTIONS | CLIENT_SECURE_CONNECTION | CLIENT_CONNECT_WITH_DB;
@@ -609,6 +611,7 @@ char * MySQL_Threads_Handler::get_variable_string(char *name) {
 		return strdup(variables.default_time_zone);
 	}
 	if (!strcasecmp(name,"server_version")) return strdup(variables.server_version);
+	if (!strcasecmp(name,"eventslog_fileformat")) return fileformat_to_str(variables.eventslog_fileformat);
 	if (!strcasecmp(name,"eventslog_filename")) return strdup(variables.eventslog_filename);
 	if (!strcasecmp(name,"default_schema")) return strdup(variables.default_schema);
 	if (!strcasecmp(name,"interfaces")) return strdup(variables.interfaces);
@@ -832,6 +835,7 @@ char * MySQL_Threads_Handler::get_variable(char *name) {	// this is the public f
 		return strdup(variables.default_time_zone);
 	}
 	if (!strcasecmp(name,"server_version")) return strdup(variables.server_version);
+	if (!strcasecmp(name,"eventslog_fileformat")) return fileformat_to_str(variables.eventslog_fileformat);
 	if (!strcasecmp(name,"eventslog_filename")) return strdup(variables.eventslog_filename);
 	if (!strcasecmp(name,"default_schema")) return strdup(variables.default_schema);
 	if (!strcasecmp(name,"interfaces")) return strdup(variables.interfaces);
